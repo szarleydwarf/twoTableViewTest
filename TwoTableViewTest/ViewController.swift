@@ -12,8 +12,7 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var topTableView: UITableView!
     @IBOutlet weak var bottomTableView: UITableView!
-    let topTableName:String = "top"
-    let bottomTableName:String = "bottom"
+
     var topTableArray:[String] = ["0", "1", "2", "3", "4" ]
     var bottomTableArray:[String] = ["zero", "one", "two", "three", "four", "five"]
 
@@ -62,13 +61,13 @@ extension ViewController: UITableViewDelegate {
         let controlContainerView =    storyboard.instantiateViewController(identifier: "ControlContainerView") as! ControlContainerView
         if tableView === self.topTableView{
             controlContainerView.text = topTableArray[indexPath.row]
-            controlContainerView.tableName = self.topTableName
+            controlContainerView.tableTag = self.topTableView.tag
             controlContainerView.delegate = self
         }
         
         if tableView === self.bottomTableView{
             controlContainerView.text = bottomTableArray[indexPath.row]
-            controlContainerView.tableName = self.bottomTableName
+            controlContainerView.tableTag = self.bottomTableView.tag
             controlContainerView.delegate = self
         }
     self.navigationController?.pushViewController(controlContainerView, animated: true)
@@ -76,13 +75,13 @@ extension ViewController: UITableViewDelegate {
 }
 
 extension ViewController: ControlContainerViewDelegate{
-    func updateValueInTable(with text: String, for tableName: String) {
-        if tableName == topTableName {
+    func updateValueInTable(with text: String, for tableTag: Int) {
+        if tableTag == self.topTableView.tag {
             guard let updateIndex1 = self.topTableView.indexPathForSelectedRow?.row else {return}
             self.topTableArray[updateIndex1] = text
             self.topTableView.reloadData()
         }
-        if tableName == bottomTableName {
+        if tableTag == self.bottomTableView.tag {
             guard let updateIndex2 = self.bottomTableView.indexPathForSelectedRow?.row else {return}
             self.bottomTableArray[updateIndex2] = text
             self.bottomTableView.reloadData()
